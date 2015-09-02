@@ -151,18 +151,24 @@ class APIRequests(object):
         }
         return self.__makeRequest(self.foxbit_api, self.__makeHeaders(), payload)
 
-    def createOrder(self, side, quantity, price):
+    def __createOrder(self, side, quantity, price):
         payload = {
-            "MsgType":"D",              # New Order Single message. Check for a full doc here: http://www.onixs.biz/fix-dictionary/4.4/msgType_D_68.html
+            "MsgType":"D",              # "D" New Order Single
             "ClOrdID": str(int(time.time())), # Unique identifier for Order as assigned by you
             "Symbol":"BTCBRL",          # Can be BTCBRL, BTCPKR, BTCVND, BTCVEF, BTCCLP.
-            "Side": side,                 # 1 - Buy, 2-Sell
+            "Side": side,               # 1 - Buy, 2-Sell
             "OrdType":"2",              # 2 - Limited order
-            "OrderQty": quantity,         # Qty in saothis
-            "Price": price,        # Price in satoshis
+            "OrderQty": quantity,       # Qty in satoshis
+            "Price": price,             # Price in satoshis
             "BrokerID":4                # 1=SurBitcoin, 3=VBTC, 4=FoxBit, 5=Tests , 8=UrduBit, 9=ChileBit
         }
         return self.__makeRequest(self.foxbit_api, self.__makeHeaders(), payload)
+
+    def buyBitcoins(self, quantity, price):
+        return self.__createOrder('1', quantity, price)
+
+    def sellBitcoins(self, quantity, price):
+        return self.__createOrder('2', quantity, price)
 
     def getBTCDepositAddress(self, reqid):
         payload = {
