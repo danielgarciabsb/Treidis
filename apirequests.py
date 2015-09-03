@@ -5,7 +5,6 @@ import requests
 import hashlib
 import hmac
 import time
-import json
 import datetime
 
 from log import logging

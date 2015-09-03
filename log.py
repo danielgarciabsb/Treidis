@@ -16,7 +16,7 @@ console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
 
 # Now, we can log to the root logger, or any other logger. First the root...
-logging.info('Sistema de log iniciado.')
+#logging.info('Sistema de log iniciado.')
 
 # Now, define a couple of other loggers which might represent areas in your
 # application:
