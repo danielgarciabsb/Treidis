@@ -1,3 +1,4 @@
+import time
 
 def manipulador():
-    print 'Iniciando manipulador'
+    time.sleep(4)

@@ -1,3 +1,4 @@
+import time
 
 def oportunista():
-    print 'Iniciando oportunista'
+    time.sleep(2)
