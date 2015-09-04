@@ -3,7 +3,7 @@ import logging
 # set up logging to file
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-                    filename='treidis.log',
+                    filename='treidis/logs/treidis.log',
                     filemode='a')
 # define a Handler which writes INFO messages or higher to the sys.stderr
 console = logging.StreamHandler()

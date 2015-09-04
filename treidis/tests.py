@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # coding: utf-8
 
 import unittest
@@ -8,7 +7,7 @@ import ConfigParser
 
 class ConfigFileTest(unittest.TestCase):
 
-    config_filename = 'treidis.conf'
+    config_filename = 'treidis/config/treidis.conf'
 
     def setUp(self):
         if not os.path.isfile(self.config_filename):
@@ -74,6 +73,3 @@ class ConfigFileTest(unittest.TestCase):
 
 class FoxBitOrderbookModelTest(unittest.TestCase):
     pass
-
-if __name__ == '__main__':
-    unittest.main()

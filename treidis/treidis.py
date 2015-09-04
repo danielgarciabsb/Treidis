@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # coding: utf-8
 
 # Import lib
@@ -15,7 +14,7 @@ import time
 
 # Testes
 import unittest
-import treidistests
+import tests
 
 # JSON
 import json
@@ -42,7 +41,7 @@ def signal_handler(signal, frame):
 class Treidis(object):
 
     # Nome do arquivo de configuracao
-    config_filename = 'treidis.conf'
+    config_filename = 'treidis/config/treidis.conf'
 
     # Inicializa log da aplicacao principal
     logger = logging.getLogger('treidis')
@@ -53,11 +52,11 @@ class Treidis(object):
         signal.signal(signal.SIGTERM, signal_handler)
         signal.signal(signal.SIGQUIT, signal_handler)
         signal.signal(signal.SIGABRT, signal_handler)
-        
+
         # Inicializa testes e verifica se todos foram validados com sucesso
-        tests = unittest.TextTestRunner(verbosity=2, failfast=True).run(
-                    unittest.TestLoader().loadTestsFromModule(treidistests))
-        if not tests.wasSuccessful():
+        test = unittest.TextTestRunner(verbosity=2, failfast=True).run(
+                    unittest.TestLoader().loadTestsFromModule(tests))
+        if not test.wasSuccessful():
             exit()
 
         # Carrega configuracoes
@@ -88,7 +87,8 @@ class Treidis(object):
                 exit()
         for algo in self.algolist:
             self.logger.info('Iniciando algoritmo: %s' % algo)
-            worker = threading.Thread(name=str(algo), target=eval(algo + '.' + algo), args=[self.apirequests])
+            log = logging.getLogger('treidis.' + algo)
+            worker = threading.Thread(name=str(algo), target=eval(algo + '.' + algo), args=[self.apirequests, log])
             worker.setDaemon(True)
             worker.start()
 
