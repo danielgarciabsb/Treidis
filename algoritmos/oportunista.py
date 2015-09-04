@@ -1,4 +1,4 @@
-import time
 
-def oportunista():
-    time.sleep(2)
+def oportunista(api):
+    print api.getBalance()
+    print 'oportunista finalizado'

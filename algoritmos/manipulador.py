@@ -1,4 +1,3 @@
-import time
 
-def manipulador():
-    time.sleep(4)
+def manipulador(args):
+    print 'manipulador finalizado'

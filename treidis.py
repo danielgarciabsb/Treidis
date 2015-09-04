@@ -1,25 +1,43 @@
 #!/usr/bin/python
 # coding: utf-8
 
+# Import lib
+import importlib
+
 # Arquivo de configuracoes
 import ConfigParser
 
 # Threads
 import threading
 
-# Requisicoes API
-from apirequests import APIRequests
-
-# Log
-from log import logging
+# Tempo
+import time
 
 # Testes
 import unittest
 import treidistests
 
+# JSON
 import json
 
-import importlib
+# Sinais
+import signal
+
+# Sistema
+import sys
+
+# Log
+from log import logging
+
+# Requisicoes API
+from apirequests import APIRequests
+
+def signal_handler(signal, frame):
+    logger = logging.getLogger('treidis')
+    logger.info('Finalizando sistema Treidis... Signal: %s' % signal)
+    logger.info('Sistema Treidis finalizado.')
+    logging.shutdown()
+    sys.exit(0)
 
 class Treidis(object):
 
@@ -30,6 +48,12 @@ class Treidis(object):
     logger = logging.getLogger('treidis')
 
     def __init__(self):
+        # Inicializa hooks de sinais de finalizacao
+        signal.signal(signal.SIGINT, signal_handler)
+        signal.signal(signal.SIGTERM, signal_handler)
+        signal.signal(signal.SIGQUIT, signal_handler)
+        signal.signal(signal.SIGABRT, signal_handler)
+        
         # Inicializa testes e verifica se todos foram validados com sucesso
         tests = unittest.TextTestRunner(verbosity=2, failfast=True).run(
                     unittest.TestLoader().loadTestsFromModule(treidistests))
@@ -52,6 +76,9 @@ class Treidis(object):
         # Inicializa algoritmos
         self.__loadAlgos()
 
+        while True:
+            time.sleep(1)
+
     def __loadAlgos(self):
         for algo in self.algolist:
             try:
@@ -61,7 +88,9 @@ class Treidis(object):
                 exit()
         for algo in self.algolist:
             self.logger.info('Iniciando algoritmo: %s' % algo)
-            threading.Thread(name=str(algo), target=eval(algo + '.' + algo)).start()
+            worker = threading.Thread(name=str(algo), target=eval(algo + '.' + algo), args=[self.apirequests])
+            worker.setDaemon(True)
+            worker.start()
 
 
 if __name__ == "__main__":
